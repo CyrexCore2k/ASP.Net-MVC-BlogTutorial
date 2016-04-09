@@ -81,12 +81,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\error.htm" />
     <Content Include="Content\ui\home\landing.htm" />
+    <Content Include="Content\ui\home\test1.htm" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Linux.pubxml" />
     <Content Include="Scripts\Internal.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\Util.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

@@ -22,13 +22,18 @@ function AJAXLoadHTML(url, data, successCallBack) {
             cache: false,
             contentType: "application/json; charset=utf-8",
             dataType: "html",
-            success: function (msg) {
-                __URLCache(url, msg);
-                if (successCallBack) successCallBack(msg);
+            success: function (msg, status, xhr) {
+                var responseType = xhr.getResponseHeader("content-type") || "";
+                if (responseType.toLowerCase().indexOf("html") > -1) {
+                    __URLCache(url, msg);
+                    if (successCallBack) successCallBack(msg);
+                } else {
+                    ProcessMessage($.parseJSON(msg));
+                }
             },
-	        error: function (msg) {
-	            AppState().pushMessage("AJAXLoadHTML failed for url: " + url);
-	        }
+            error: function (msg) {
+                AppState().pushMessage("AJAXLoadHTML failed for url: " + url);
+            }
         });
     } else {
         if (successCallBack) successCallBack(cache);
@@ -43,10 +48,24 @@ function AJAXLoadData(url, data, successCallBack) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {
-            if (successCallBack) successCallBack(msg);
+            ProcessMessage(msg, successCallBack);
         },
         error: function (msg) {
             AppState().pushMessage("AJAXLoadData failed for url: " + url);
         }
     });
+}
+
+function ProcessMessage(msg, successCallBack) {
+    if (msg.ServerExceptions.length > 0) {
+        $.each(msg.ServerExceptions, function (index, item) {
+            alert("Server encountered an error: " + item.Message);
+        });
+    } else if (msg.ClientExceptions.length > 0) {
+        $.each(msg.ClientExceptions, function (index, item) {
+            alert(item.Number + ": " + item.Source + " caused error " + item.Message + ", value: " + item.Value);
+        });
+    } else if (successCallBack) {
+        successCallBack(msg);
+    }
 }

@@ -5,8 +5,12 @@
     <title>Blog Tutorial</title>
     <script src="/Scripts/jquery-1.8.2.min.js" language="javascript" type="text/javascript"></script>
     <script src="/Scripts/jquery-ui-1.8.24.min.js" language="javascript" type="text/javascript"></script>
+    <script src="/Scripts/jquery.ba-hashchange.min.js" language="javascript" type="text/javascript"></script>
     <script src="/Scripts/Util.js" language="javascript" type="text/javascript"></script>
 	<script src="/Scripts/Internal.js" language="javascript" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () { __Init(); });
+	</script>
 </head>
 <body>
 	<script language="javascript" type="text/javascript">
@@ -18,15 +22,9 @@
         			+ AppState().messages.join().replace(/,/g, "\n")
     			);
 	        });
-	        $(".obj_btnLoadWorkspace").click(function () {
-	            AJAXLoadHTML("/Content/ui/home/landing.htm", null, function (msg) {
-	                $("#workspace").html(msg);
-	            });
-	        });
 	    });
 	</script>
 	    
-	<input type="button" class="obj_btnLoadWorkspace" value="Load Workspace" />
 	<input type="button" class="obj_btnShowCacheInfo" value="Show Cache Info" />
 	    
 	<div id="workspace"></div>

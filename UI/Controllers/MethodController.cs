@@ -31,5 +31,15 @@ namespace BlogTutorial.UI.Controllers
                         }
             });
         }
+
+        public JsonResult DemonstrateClientError()
+        {
+            throw new Classes.Exceptions.ClientException("None", "Nothing", "This is just a demonstration of a client exception.", Guid.Parse("0EEDFAD3-C8C3-4CFD-BF4C-E64B9F3136F3"));
+        }
+
+        public JsonResult DemonstrateServerError()
+        {
+            throw new Exception("This is just a demonstration of a server exception.");
+        }
     }
 }
