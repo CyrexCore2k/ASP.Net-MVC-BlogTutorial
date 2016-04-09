@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace BlogTutorial.UI
+namespace BlogTutorial.WebService
 {
     public class FilterConfig
     {

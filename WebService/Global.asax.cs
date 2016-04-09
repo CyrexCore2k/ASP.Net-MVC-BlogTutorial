@@ -5,8 +5,9 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Utilities = BlogTutorial.Utilities;
 
-namespace BlogTutorial.UI
+namespace BlogTutorial.WebService
 {
     /// <summary>
     /// Override to support Mono
@@ -54,20 +55,20 @@ namespace BlogTutorial.UI
         {
             Exception ex = Server.GetLastError();
 
-            if (ex is Classes.Exceptions.ClientException)
+            if (ex is Utilities.Exceptions.ClientException)
             {
-                OutputMessage(new Classes.JSONMessageObject() 
+                OutputMessage(new Utilities.JSONMessageObject() 
                 {
-                    ClientExceptions = { (Classes.Exceptions.ClientException)ex }
+                    ClientExceptions = { (Utilities.Exceptions.ClientException)ex }
                 });
             }
             else 
             {
                 WriteToFile(ex, (Exception ex1) =>
                 {
-                    OutputMessage(new Classes.JSONMessageObject()
+                    OutputMessage(new Utilities.JSONMessageObject()
                     {
-                        ServerExceptions = { new Classes.Exceptions.ServerException("Failed to log error.") }
+                        ServerExceptions = { new Utilities.Exceptions.ServerException("Failed to log error.") }
                     });
                 });
             }
@@ -85,9 +86,9 @@ namespace BlogTutorial.UI
             try
             {
                 System.IO.File.AppendAllText(Path + LogId.ToString() + ".log", FormatException(ex, Request));
-                OutputMessage(new Classes.JSONMessageObject()
+                OutputMessage(new Utilities.JSONMessageObject()
                 {
-                    ServerExceptions = { new Classes.Exceptions.ServerException("Error saved to file log. Id: " + LogId.ToString()) }
+                    ServerExceptions = { new Utilities.Exceptions.ServerException("Error saved to file log. Id: " + LogId.ToString()) }
                 });
             }
             catch(Exception writeException)
@@ -120,7 +121,7 @@ namespace BlogTutorial.UI
                                                  InnerException);
         }
 
-        private void OutputMessage(Classes.JSONMessageObject data)
+        private void OutputMessage(Utilities.JSONMessageObject data)
         {
             const string JSONP_CALLBACK_PARAMETER = "callback";
 
@@ -157,7 +158,7 @@ namespace BlogTutorial.UI
                         MessageBuilder.Append("<li>" + Exception.Number + ": <b>" + Exception.Source + "</b> caused error: " + Exception.Message + ", value: " + Exception.Value + "</li>");
                 }
 
-                Response.Write(String.Format(System.IO.File.ReadAllText(Server.MapPath("/Content/ui/error.htm")), MessageBuilder.ToString()));
+                Response.Write(String.Format(System.IO.File.ReadAllText(Server.MapPath("/Content/error.htm")), MessageBuilder.ToString()));
             }
         }
     }

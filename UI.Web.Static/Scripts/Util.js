@@ -41,6 +41,8 @@ function AJAXLoadHTML(url, data, successCallBack) {
 }
 
 function AJAXLoadData(url, data, successCallBack) {
+    url = "http://localhost:56697" + url;
+
     $.ajax({
         type: "POST",
         data: data,

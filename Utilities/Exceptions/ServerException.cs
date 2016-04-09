@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BlogTutorial.UI.Classes.Exceptions
+namespace BlogTutorial.Utilities.Exceptions
 {
     public class ServerException : Exception
     {

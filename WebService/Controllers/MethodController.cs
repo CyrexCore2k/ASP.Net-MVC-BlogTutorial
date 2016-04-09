@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace BlogTutorial.UI.Controllers
+namespace BlogTutorial.WebService.Controllers
 {
     public class MethodController : BaseController
     {
@@ -34,7 +34,7 @@ namespace BlogTutorial.UI.Controllers
 
         public JsonResult DemonstrateClientError()
         {
-            throw new Classes.Exceptions.ClientException("None", "Nothing", "This is just a demonstration of a client exception.", Guid.Parse("0EEDFAD3-C8C3-4CFD-BF4C-E64B9F3136F3"));
+            throw new Utilities.Exceptions.ClientException("None", "Nothing", "This is just a demonstration of a client exception.", Guid.Parse("0EEDFAD3-C8C3-4CFD-BF4C-E64B9F3136F3"));
         }
 
         public JsonResult DemonstrateServerError()
