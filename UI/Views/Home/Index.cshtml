@@ -1,35 +1,34 @@
 ﻿<!DOCTYPE html>
-
+	
 <html>
 <head>
     <title>Blog Tutorial</title>
     <script src="/Scripts/jquery-1.8.2.min.js" language="javascript" type="text/javascript"></script>
     <script src="/Scripts/jquery-ui-1.8.24.min.js" language="javascript" type="text/javascript"></script>
     <script src="/Scripts/Util.js" language="javascript" type="text/javascript"></script>
+	<script src="/Scripts/Internal.js" language="javascript" type="text/javascript"></script>
 </head>
 <body>
-    <script language="javascript" type="text/javascript">
-        $(document).ready(function() {
-            AJAXLoadData("/Method/GetSpoofedInfo", null, function (msg) {
-                $(".obj_lstNames li").not(".obj_static").remove();
-
-                var template = $(".obj_lstNames .obj_template");
-                $.each(msg.Data.Names, function (index, item) {
-
-                    var ListItem = template.clone();
-                    ListItem.text(item.Name);
-                    ListItem.insertBefore(template);
-                    ListItem.removeClass("obj_template").removeClass("obj_static").show();
-                });
-            });
-        })
-    </script>
-
-    <h1>Welcome!</h1>
-
-    <ul class="obj_lstNames">
-        <li class="obj_template obj_static" style="display: none;"></li>
-        <li>Loading...</li>
-    </ul>
+	<script language="javascript" type="text/javascript">
+	    $(document).ready(function () {
+	        $(".obj_btnShowCacheInfo").click(function () {
+	            alert("There are currently " + AppState().urlCache.count + " url cache entries stored.\n"
+        			+ "AppState().messages: \n"
+        			+ "--------------------- \n"
+        			+ AppState().messages.join().replace(/,/g, "\n")
+    			);
+	        });
+	        $(".obj_btnLoadWorkspace").click(function () {
+	            AJAXLoadHTML("/Content/ui/home/landing.htm", null, function (msg) {
+	                $("#workspace").html(msg);
+	            });
+	        });
+	    });
+	</script>
+	    
+	<input type="button" class="obj_btnLoadWorkspace" value="Load Workspace" />
+	<input type="button" class="obj_btnShowCacheInfo" value="Show Cache Info" />
+	    
+	<div id="workspace"></div>
 </body>
 </html>
