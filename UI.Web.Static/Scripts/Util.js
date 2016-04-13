@@ -44,11 +44,11 @@ function AJAXLoadData(url, data, successCallBack) {
     url = "http://localhost:56697" + url;
 
     $.ajax({
-        type: "POST",
+        type: "GET",
         data: data,
         url: url,
         contentType: "application/json; charset=utf-8",
-        dataType: "json",
+        dataType: "jsonp",
         success: function (msg) {
             ProcessMessage(msg, successCallBack);
         },
