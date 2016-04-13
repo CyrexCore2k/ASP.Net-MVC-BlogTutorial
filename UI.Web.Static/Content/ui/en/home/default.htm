@@ -1,0 +1,39 @@
+﻿
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $("#txtPassword").keypress(function (e) { if (e.which == 13) DoLogin(); });
+        $("#btnLogin").click(function () { DoLogin() });
+        $("#btnLogout").click(function () {
+            PassportLoadData("/Service/LogOut/", null, function (msg) {
+                alert("Successfully logged out.");
+            });
+        });
+        $("#txtUsername").focus();
+    });
+    function DoLogin() {
+        $("#rowLoginError").hide();
+        Login(
+                $("#txtUsername").val(),
+                $("#txtPassword").val(),
+                function () {
+                    alert("Login success!");
+                },
+                function () {
+                    $("#rowLoginError").show();
+                }
+            );
+    }
+</script>
+<table>
+    <tr id="rowLoginError" style="display: none;"><td colspan="2">Incorrect Username or Password.</td></tr>
+    <tr><td>Username:</td><td><input type="text" id="txtUsername" /></td></tr>
+    <tr><td>Password:</td><td><input type="password" id="txtPassword" /></td></tr>
+    <tr><td colspan="2">
+        <input type="button" id="btnLogin" value="Login" />
+        <input type="button" id="btnLogout" value="Logout" />
+    </td></tr>
+</table>
+
+<a href="#passport/">Show master page</a><br />
+<a href="#example/">Show regular content</a><br />
+

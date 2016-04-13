@@ -2,12 +2,35 @@
     return "__state";
 }
 function __Init() {
+    // Detect language switch
+    var temp = AppState().routes.language.val;
+    AppState().routes.language.val = function (language) {
+        if (!language || temp() == language) {
+            return temp();
+        }
+        var result = temp(language);
+        __Route();
+        return result;
+    };
+
+    // Hash navigation initialization
     $(window).hashchange(function () {
         AppState().hashInfo = __GetHashInfo();
         AppState().data = AppState().hashInfo.data;
         __Route();
     });
     $(window).hashchange();
+}
+function __GetWorkspaceId(path) {
+    var result = AppState().workspaces.root;
+    var separator = AppState().workspaces.separator;
+
+    if (path && path.length > 0) {
+        var filtered = path.filter(function (element) { return element.trim().length > 0; });
+        if (filtered.length > 0) result += separator + filtered.join(separator);
+    }
+
+    return result;
 }
 function __URLCache(url, val) {
 
@@ -64,22 +87,63 @@ function __GetHashInfo() {
     return info;
 }
 function __Route() {
-    var base = "/Content/ui";
-    var resource = base;
+    var path = null;
 
     if (!AppState().hashInfo.nav) // default
-    {
-        AJAXLoadHTML(base + "/home/landing.htm", null, function (msg) { $("#workspace").html(msg); });
-        return;
+        __LoadRoute((AppState().routes.defaultFolder + AppState().routes.defaultPage).split("/"));
+    else if (AppState().hashInfo.parts.length == 1)
+        __LoadRoute((AppState().routes.defaultFolder + AppState().hashInfo.parts[0]).split("/"));
+    else
+        __LoadRoute(AppState().hashInfo.parts);
+}
+function __LoadRoute(parts, path, workspaceId) {
+    parts = parts.slice(0).reverse();
+
+    if (!path) path = "";
+    if (!workspaceId) workspaceId = __GetWorkspaceId();
+
+    var part = parts.pop();
+
+    if (parts.length == 0) {
+        if (part == "") part = AppState().routes.defaultPage;
+        path = AppState().routes.getLanguageBase() + path + part + AppState().routes.extension;
+        AJAXLoadHTML(path, null, function (msg) { __LoadWorkspace(workspaceId, msg, path); });
+    } else {
+        path += part + "/";
+        var masterpagePath =
+            AppState().routes.getLanguageBase() +
+            path +
+            AppState().routes.masterPage + 
+            AppState().routes.extension;
+
+        AJAXLoadHTML(masterpagePath, null,
+            function (msg) {
+                __LoadWorkspace(workspaceId, msg, masterpagePath);
+                workspaceId = __GetWorkspaceId(path.split("/"));
+                __LoadRoute(parts, path, workspaceId);
+            },
+            {
+                errorCallBack: function (msg) { __LoadRoute(parts, path, workspaceId); }
+            });
     }
 
-    if (AppState().hashInfo.parts.length == 1)
-        resource += "/home/" + AppState().hashInfo.parts[0];
-    else {
-        $.each(AppState().hashInfo.parts, function (index, item) {
-            resource += "/" + item;
+}
+function __LoadWorkspace(workspaceId, data, path) {
+    var workspaceElement = $("#" + workspaceId);
+    if (workspaceElement.length == 0) 
+        return AppState().pushMessage("No workspace id '" + workspaceId + "' could be found.");
+
+    var workspaces = AppState().workspaces;
+
+    var loadedWorkspace = workspaces.loaded.filter(function (element) { return element.id == workspaceId; });
+    if (loadedWorkspace.length > 0) 
+    {
+        if (loadedWorkspace[0].path == path) return; // No change. Do nothing.
+        workspaces.loaded = workspaces.loaded.filter(function (element) {
+            return element.id.substring(0, workspaceId.length) != workspaceId; 
         });
     }
 
-    AJAXLoadHTML(resource + ".htm", null, function (msg) { $("#workspace").html(msg); });
+    workspaceElement.html(data);
+    workspaces.loaded.push({ id: workspaceId, path: path });
 }

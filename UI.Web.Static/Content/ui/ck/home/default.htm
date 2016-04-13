@@ -1,0 +1,40 @@
+﻿
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $("#txtPassword").keypress(function (e) { if (e.which == 13) DoLogin(); });
+        $("#btnLogin").click(function () { DoLogin(); });
+        $("#btnLogout").click(function () {
+            PassportLoadData("/Service/LogOut/", null, function (msg) {
+                alert("Úspěšně odhlášen");
+            });
+        });
+        $("#txtUsername").focus();
+    });
+
+    function DoLogin() {
+        $("#rowLoginError").hide();
+        Login(
+                $("#txtUsername").val(),
+                $("#txtPassword").val(),
+                function () {
+                    alert("Úspěšné přihlášení!");
+                },
+                function () {
+                    $("#rowLoginError").show();
+                }
+            );
+    }
+</script>
+<table>
+    <tr id="rowLoginError" style="display: none;"><td colspan="2">Nesprávné uživatelské jméno nebo heslo.</td></tr>
+    <tr><td>Uživatelské jméno:</td><td><input type="text" id="txtUsername" /></td></tr>
+    <tr><td>Heslo:</td><td><input type="password" id="txtPassword" /></td></tr>
+    <tr><td colspan="2">
+        <input type="button" id="btnLogin" value="Přihlášení" />
+        <input type="button" id="btnLogout" value="Odhlášení" />
+    </td></tr>
+</table>
+
+<a href="#passport/">Ukaž hlavní stranu</a><br />
+<a href="#example/">Ukaž obvyklý obsah</a><br />
+

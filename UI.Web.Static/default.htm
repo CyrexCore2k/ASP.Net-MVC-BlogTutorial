@@ -2,6 +2,8 @@
 	
 <html>
 <head>
+    <script src="/Scripts/webtoolkit.base64.js" language="javascript" type="text/javascript"></script>
+    <script src="/Scripts/webtoolkit.sha256.js" language="javascript" type="text/javascript"></script>
 	<script src="/Scripts/jquery-1.8.2.min.js" language="javascript" type="text/javascript"></script>
 	<script src="/Scripts/jquery-ui-1.8.24.min.js" language="javascript" type="text/javascript"></script>
     <script src="/Scripts/jquery.ba-hashchange.min.js" language="javascript" type="text/javascript"></script>
@@ -21,11 +23,22 @@
         			+ AppState().messages.join().replace(/,/g, "\n")
     			);
 	        });
+	        
+	        $(".obj_ddlSelectLanguage option[value='" + AppState().routes.language.val() + "']").attr("selected", "selected");
+	        $(".obj_ddlSelectLanguage").change(function () {
+	            alert("Setting language to: " + $(this).val());
+	            AppState().routes.language.val($(this).val());
+	        });
 	    });
 	</script>
-	    
-	<input type="button" class="obj_btnShowCacheInfo" value="Show Cache Info" />
-	    
-	<div id="workspace"></div>
+    Select Language:
+    <select class="obj_ddlSelectLanguage">
+        <option value="en">English</option>
+        <option value="ck">Czech</option>
+    </select>
+  	<input type="button" class="obj_btnShowCacheInfo" value="Show Cache Info" />
+    <br /><br />
+    <hr />
+	<div id="__workspace"></div>
 </body>
 </html>
