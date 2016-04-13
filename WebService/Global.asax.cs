@@ -123,8 +123,6 @@ namespace BlogTutorial.WebService
 
         private void OutputMessage(Utilities.JSONMessageObject data)
         {
-            const string JSONP_CALLBACK_PARAMETER = "callback";
-
             data.LoggedIn = false;
             data.IsAdmin = false;
             data.Success = false;
@@ -136,10 +134,11 @@ namespace BlogTutorial.WebService
                 Response.ContentType = "application/json; charset=utf-8";
                 Response.Write(data.toJSON());
             }
-            else if (Request.ContentType.ToLower().Contains("application/jsonp"))
+            else if (Request.ContentType.ToLower().Contains("application/jsonp") ||
+                Request.QueryString.AllKeys.Contains(Controllers.BaseController.DEFAULT_JSONP_CALLBACK_PARAMETER))
             {
                 Response.ContentType = "application/javascript; charset=utf-8";
-                Response.Write(Request.QueryString[JSONP_CALLBACK_PARAMETER].ToString() + "(" + data.toJSON() + ")");
+                Response.Write(Request.QueryString[Controllers.BaseController.DEFAULT_JSONP_CALLBACK_PARAMETER].ToString() + "(" + data.toJSON() + ");");
             }
             else
             {
